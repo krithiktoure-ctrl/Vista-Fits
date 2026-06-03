@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VistaFits — Rent. Wear. Return.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue: #1a6fd4;
+      --blue-dark: #0d3d7a;
+      --blue-deeper: #071f3d;
+      --blue-mid: #378add;
+      --blue-light: #e6f1fb;
+      --blue-pale: #f0f6ff;
+      --accent: #5ab4ff;
+      --text: #0a1628;
+      --text-muted: #4a6080;
+      --grad: linear-gradient(135deg, #071f3d 0%, #0d3d7a 45%, #1a6fd4 100%);
+      --grad-soft: linear-gradient(160deg, #e6f1fb 0%, #f0f6ff 100%);
+    }
+
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: var(--text); overflow-x: hidden; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 4rem;
+      background: rgba(7,31,61,0.92);
+      backdrop-filter: blur(16px);
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 700;
+      color: white; text-decoration: none; letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+    .nav-links a { text-decoration: none; color: rgba(255,255,255,0.65); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: white; }
+    .nav-cta {
+      background: var(--accent); color: var(--blue-deeper) !important;
+      padding: 0.5rem 1.3rem; border-radius: 50px; font-weight: 600 !important;
+      transition: opacity 0.2s !important;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO — full bleed, editorial split */
+    .hero {
+      min-height: 100vh;
+      background: var(--grad);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative grid lines */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-left {
+      padding: 10rem 4rem 6rem;
+      position: relative; z-index: 1;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+    .hero-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+    .hero-eyebrow span {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2.5px;
+      text-transform: uppercase; color: var(--accent);
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.5rem, 5.5vw, 5.5rem);
+      color: white; line-height: 1.05;
+      margin-bottom: 1.75rem;
+      font-weight: 700;
+    }
+
+    .hero h1 em {
+      font-style: italic; color: var(--accent);
+    }
+
+    .hero-sub {
+      font-size: 1.05rem; color: rgba(255,255,255,0.7);
+      line-height: 1.75; max-width: 420px;
+      margin-bottom: 2.75rem;
+    }
+
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+    .btn-white {
+      background: white; color: var(--blue-deeper);
+      padding: 0.9rem 2.2rem; border-radius: 4px;
+      text-decoration: none; font-weight: 600; font-size: 0.95rem;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+
+    .btn-ghost {
+      color: rgba(255,255,255,0.8); font-size: 0.95rem; font-weight: 500;
+      text-decoration: none; display: flex; align-items: center; gap: 0.4rem;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: white; }
+    .btn-ghost::after { content: '→'; transition: transform 0.2s; }
+    .btn-ghost:hover::after { transform: translateX(3px); }
+
+    /* Hero right — big visual panel */
+    .hero-right {
+      height: 100vh;
+      position: relative;
+      display: flex; flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 4rem 2rem;
+      z-index: 1;
+    }
+
+    .hero-stat-stack {
+      display: flex; flex-direction: column; gap: 1.25rem;
+    }
+
+    .hero-stat {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem;
+      backdrop-filter: blur(8px);
+      transition: background 0.2s;
+    }
+    .hero-stat:hover { background: rgba(255,255,255,0.11); }
+
+    .stat-emoji { font-size: 2.2rem; flex-shrink: 0; }
+
+    .stat-text strong {
+      display: block; color: white; font-size: 1.5rem; font-weight: 700;
+      font-family: 'Cormorant Garamond', serif; line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .stat-text span { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+
+    /* TICKER */
+    .ticker {
+      background: var(--accent);
+      padding: 0.75rem 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 20s linear infinite;
+    }
+    .ticker-inner span {
+      color: var(--blue-deeper);
+      font-weight: 700; font-size: 0.8rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin: 0 2.5rem;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* CATEGORY CARDS — big bold horizontal scroll */
+    .cats-section {
+      padding: 6rem 4rem;
+      background: var(--grad-soft);
+    }
+
+    .cats-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+
+    .cats-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      color: var(--blue-deeper);
+      line-height: 1.1;
+    }
+
+    .cats-header a {
+      color: var(--blue); font-weight: 600; font-size: 0.9rem;
+      text-decoration: none; white-space: nowrap;
+    }
+    .cats-header a:hover { text-decoration: underline; }
+
+    .cat-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .cat-card {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 3/4;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+
+    .cat-card-bg {
+      position: absolute; inset: 0;
+      transition: transform 0.4s ease;
+    }
+    .cat-card:hover .cat-card-bg { transform: scale(1.04); }
+
+    .cat-card.halloween .cat-card-bg { background: linear-gradient(160deg, #1a1020 0%, #3d1a6e 100%); }
+    .cat-card.suits .cat-card-bg { background: linear-gradient(160deg, #071f3d 0%, #0d4a8a 100%); }
+    .cat-card.party .cat-card-bg { background: linear-gradient(160deg, #0d2a5a 0%, #1a6fd4 100%); }
+
+    .cat-card-emoji {
+      position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%, -60%);
+      font-size: 5rem; line-height: 1;
+      transition: transform 0.3s;
+    }
+    .cat-card:hover .cat-card-emoji { transform: translate(-50%, -65%) scale(1.1); }
+
+    .cat-card-info {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 2rem 1.75rem 1.75rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    }
+
+    .cat-card-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem; font-weight: 700; color: white;
+      margin-bottom: 0.25rem;
+    }
+
+    .cat-card-info p { color: rgba(255,255,255,0.65); font-size: 0.82rem; }
+
+    .cat-arrow {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.9rem;
+      transition: background 0.2s;
+    }
+    .cat-card:hover .cat-arrow { background: rgba(255,255,255,0.25); }
+
+    /* MARQUEE STRIP */
+    .strip {
+      background: var(--blue-deeper);
+      padding: 2rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .strip-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.9rem;
+    }
+
+    .strip-item strong { color: white; font-size: 1.3rem; font-family: 'Cormorant Garamond', serif; }
+
+    .strip-divider { width: 1px; height: 40px; background: rgba(255,255,255,0.15); }
+
+    /* PROCESS — horizontal numbered */
+    .process-section {
+      padding: 7rem 4rem;
+      max-width: 1200px; margin: 0 auto;
+    }
+
+    .process-label {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;
+    }
+    .process-label::before {
+      content: ''; display: block; width: 32px; height: 2px; background: var(--blue);
+    }
+    .process-label span {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--blue);
+    }
+
+    .process-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      color: var(--blue-deeper); margin-bottom: 3.5rem;
+    }
+
+    .process-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid rgba(26,111,212,0.12);
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .process-step {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid rgba(26,111,212,0.12);
+      position: relative;
+    }
+    .process-step:last-child { border-right: none; }
+
+    .process-step:hover { background: var(--blue-pale); }
+
+    .step-n {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem; font-weight: 700;
+      color: var(--blue-light); line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .step-ico { font-size: 1.8rem; margin-bottom: 0.75rem; display: block; }
+
+    .process-step h3 {
+      font-size: 1.05rem; font-weight: 600;
+      color: var(--blue-deeper); margin-bottom: 0.5rem;
+    }
+
+    .process-step p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.65; }
+
+    /* CTA BAND */
+    .cta-band {
+      margin: 0 4rem 6rem;
+      background: var(--grad);
+      border-radius: 24px;
+      padding: 4rem;
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 2rem;
+      position: relative; overflow: hidden;
+    }
+
+    .cta-band::after {
+      content: 'VF';
+      position: absolute; right: -20px; bottom: -40px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 14rem; font-weight: 700;
+      color: rgba(255,255,255,0.04); line-height: 1;
+      pointer-events: none;
+    }
+
+    .cta-band h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: white; margin-bottom: 0.5rem;
+    }
+    .cta-band p { color: rgba(255,255,255,0.7); font-size: 0.97rem; }
+
+    .btn-cta-white {
+      background: white; color: var(--blue-deeper);
+      padding: 1rem 2.5rem; border-radius: 4px;
+      text-decoration: none; font-weight: 700; font-size: 1rem;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .btn-cta-white:hover { opacity: 0.9; }
+
+    /* FOOTER */
+    footer {
+      background: var(--blue-deeper);
+      padding: 2.5rem 4rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; color: white; text-decoration: none; font-weight: 700;
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { color: rgba(255,255,255,0.5); font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: white; }
+    footer p { color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 8rem 1.5rem 4rem; }
+      .cats-section { padding: 4rem 1.5rem; }
+      .cat-cards { grid-template-columns: 1fr; }
+      .cat-card { aspect-ratio: 5/3; }
+      .strip { padding: 1.5rem; gap: 1rem; }
+      .process-section { padding: 4rem 1.5rem; }
+      .process-steps { grid-template-columns: 1fr; }
+      .process-step { border-right: none; border-bottom: 1px solid rgba(26,111,212,0.12); }
+      .process-step:last-child { border-bottom: none; }
+      .cta-band { margin: 0 1.5rem 4rem; padding: 2.5rem; grid-template-columns: 1fr; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" style="display:flex;align-items:center;text-decoration:none;"><img src="logo.png" style="height:90px;width:auto;" alt="VistaFits"/></a>
+    <ul class="nav-links">
+      <li><a href="browse.html">Browse</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a class="nav-cta" href="browse.html">Rent Now</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="hero-dot"></div>
+        <span>Isla Vista's Rental Closet</span>
+      </div>
+      <h1>Every night<br>deserves the<br><em>perfect fit.</em></h1>
+      <p class="hero-sub">Rent premium outfits for parties, formals, Halloween, and everything in between. Look expensive — spend less.</p>
+      <div class="hero-actions">
+        <a href="browse.html" class="btn-white">Browse the Closet</a>
+        <a href="about.html" class="btn-ghost">How it works</a>
+      </div>
+    </div>
+
+    <div class="hero-right" style="display:flex;align-items:center;justify-content:center;padding:8rem 3rem 4rem 1rem;">
+      <div style="width:100%;max-width:420px;aspect-ratio:3/4;border-radius:24px;overflow:hidden;position:relative;box-shadow:0 32px 80px rgba(0,0,0,0.4);">
+        <svg viewBox="0 0 420 560" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style="display:block;">
+          <defs>
+            <linearGradient id="bg1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0d2a5a"/>
+              <stop offset="100%" stop-color="#1a6fd4"/>
+            </linearGradient>
+            <linearGradient id="card1" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#1a3a6e"/>
+              <stop offset="100%" stop-color="#0d2a5a"/>
+            </linearGradient>
+            <linearGradient id="shimmer" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0)"/>
+              <stop offset="50%" stop-color="rgba(255,255,255,0.08)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Background -->
+          <rect width="420" height="560" fill="url(#bg1)"/>
+
+          <!-- Grid lines -->
+          <line x1="0" y1="140" x2="420" y2="140" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="0" y1="280" x2="420" y2="280" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="0" y1="420" x2="420" y2="420" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="140" y1="0" x2="140" y2="560" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <line x1="280" y1="0" x2="280" y2="560" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+          <!-- Top label -->
+          <rect x="20" y="20" width="130" height="28" rx="14" fill="rgba(90,180,255,0.2)" stroke="rgba(90,180,255,0.4)" stroke-width="1"/>
+          <text x="85" y="38" text-anchor="middle" fill="#5ab4ff" font-size="10" font-family="sans-serif" font-weight="700" letter-spacing="1.5">IV'S CLOSET</text>
+
+          <!-- Big hanger SVG illustration -->
+          <g transform="translate(210, 120)">
+            <!-- Hook -->
+            <path d="M0,-55 C0,-55 12,-55 12,-44 C12,-33 4,-28 0,-28" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- Bar -->
+            <line x1="-90" y1="10" x2="90" y2="10" stroke="rgba(255,255,255,0.9)" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- Left arm -->
+            <path d="M0,-28 C-10,-10 -50,5 -90,10" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="3.5" stroke-linecap="round"/>
+            <!-- Right arm -->
+            <path d="M0,-28 C10,-10 50,5 90,10" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="3.5" stroke-linecap="round"/>
+          </g>
+
+          <!-- Outfit cards floating -->
+          <!-- Card 1 - Halloween -->
+          <rect x="24" y="210" width="110" height="145" rx="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <text x="79" y="268" text-anchor="middle" font-size="36">🎃</text>
+          <text x="79" y="292" text-anchor="middle" fill="white" font-size="11" font-family="sans-serif" font-weight="600">Halloween</text>
+          
+          <rect x="34" y="320" width="90" height="24" rx="12" fill="rgba(90,180,255,0.25)"/>
+          <text x="79" y="336" text-anchor="middle" fill="#5ab4ff" font-size="9" font-family="sans-serif" font-weight="700">RENT NOW</text>
+
+          <!-- Card 2 - Suits -->
+          <rect x="155" y="210" width="110" height="145" rx="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <text x="210" y="268" text-anchor="middle" font-size="36">🤵</text>
+          <text x="210" y="292" text-anchor="middle" fill="white" font-size="11" font-family="sans-serif" font-weight="600">Formal</text>
+          
+          <rect x="165" y="320" width="90" height="24" rx="12" fill="rgba(90,180,255,0.25)"/>
+          <text x="210" y="336" text-anchor="middle" fill="#5ab4ff" font-size="9" font-family="sans-serif" font-weight="700">RENT NOW</text>
+
+          <!-- Card 3 - Party -->
+          <rect x="286" y="210" width="110" height="145" rx="14" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <text x="341" y="268" text-anchor="middle" font-size="36">🪩</text>
+          <text x="341" y="292" text-anchor="middle" fill="white" font-size="11" font-family="sans-serif" font-weight="600">Going Out</text>
+          
+          <rect x="296" y="320" width="90" height="24" rx="12" fill="rgba(90,180,255,0.25)"/>
+          <text x="341" y="336" text-anchor="middle" fill="#5ab4ff" font-size="9" font-family="sans-serif" font-weight="700">RENT NOW</text>
+
+          <!-- Bottom tag -->
+          <rect x="20" y="390" width="380" height="64" rx="16" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <text x="40" y="418" fill="white" font-size="13" font-family="sans-serif" font-weight="700">📍 Isla Vista, CA</text>
+          <text x="40" y="440" fill="rgba(255,255,255,0.55)" font-size="10" font-family="sans-serif">Same-day pickup · No dry cleaning needed</text>
+
+          <!-- Sparkles -->
+          <text x="360" y="55" font-size="22">✨</text>
+          <text x="30" y="175" font-size="16">⭐</text>
+          <text x="370" y="195" font-size="14">🌟</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-inner">
+      <span>Rent. Wear. Return.</span>
+      <span>IV's Closet</span>
+      <span>Halloween Costumes</span>
+      <span>Suits & Formals</span>
+      <span>Going Out Fits</span>
+      <span>Same-Day Pickup</span>
+      <span>Rent. Wear. Return.</span>
+      <span>IV's Closet</span>
+      <span>Halloween Costumes</span>
+      <span>Suits & Formals</span>
+      <span>Going Out Fits</span>
+      <span>Same-Day Pickup</span>
+    </div>
+  </div>
+
+  <!-- CATEGORY CARDS -->
+  <div class="cats-section">
+    <div class="cats-header">
+      <h2>What's your vibe<br>tonight?</h2>
+      <a href="browse.html">View all →</a>
+    </div>
+    <div class="cat-cards">
+      <a class="cat-card halloween" href="browse.html#halloween">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-emoji">🎃</div>
+        <div class="cat-arrow">↗</div>
+        <div class="cat-card-info">
+          <h3>Halloween</h3>
+          <p>Halloween Costumes</p>
+        </div>
+      </a>
+      <a class="cat-card suits" href="browse.html#suits">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-emoji">🤵</div>
+        <div class="cat-arrow">↗</div>
+        <div class="cat-card-info">
+          <h3>Suits & Formal</h3>
+          <p>Suits &amp; Formal Wear</p>
+        </div>
+      </a>
+      <a class="cat-card party" href="browse.html#party">
+        <div class="cat-card-bg"></div>
+        <div class="cat-card-emoji">🪩</div>
+        <div class="cat-arrow">↗</div>
+        <div class="cat-card-info">
+          <h3>Going Out</h3>
+          <p>Going Out Fits</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- STATS STRIP -->
+  <div class="strip">
+    <div class="strip-item"><strong>$12</strong><span>Cheapest rental / night</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><strong>3</strong><span>Steps to rent</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><strong>Same day</strong><span>Pickup in IV</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><strong>0</strong><span>Dry cleaning needed</span></div>
+    <div class="strip-divider"></div>
+    <div class="strip-item"><strong>100%</strong><span>College student approved</span></div>
+  </div>
+
+  <!-- PROCESS -->
+  <div class="process-section">
+    <div class="process-label"><span>The Process</span></div>
+    <h2>Three steps, zero stress.</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-n">01</div>
+        <span class="step-ico">👗</span>
+        <h3>Browse & Pick</h3>
+        <p>Scroll through the catalog and lock in the fit that matches your night's energy.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-n">02</div>
+        <span class="step-ico">📦</span>
+        <h3>Pick Up in IV</h3>
+        <p>Grab your outfit same-day from us right here in Isla Vista. No shipping, no waiting.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-n">03</div>
+        <span class="step-ico">🔄</span>
+        <h3>Return & Repeat</h3>
+        <p>Drop it back when the night's over. No washing, no storing. See you next weekend.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA BAND -->
+  <div class="cta-band">
+    <div>
+      <h2>Ready for your next fit?</h2>
+      <p>Browse the closet and hit us up to book. We'll handle the rest.</p>
+    </div>
+    <a href="browse.html" class="btn-cta-white">Browse Now</a>
+  </div>
+
+  <footer>
+    <a class="footer-logo" href="index.html">Vista<span>Fits</span></a>
+    <div class="footer-links">
+      <a href="browse.html">Browse</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <p>© 2025 VistaFits · Isla Vista, CA</p>
+  </footer>
+
+</body>
+</html>
