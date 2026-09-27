@@ -390,6 +390,57 @@
     .footer-links a:hover { color: white; }
     footer p { color: rgba(255,255,255,0.35); font-size: 0.8rem; }
 
+    /* POPUP EVENTS */
+    .popup-section { background: var(--blue-pale); padding: 6rem 4rem; }
+    .popup-section-inner { max-width: 1100px; margin: 0 auto; }
+    .popup-section-header { text-align: center; margin-bottom: 3rem; }
+    .section-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--blue-light); border-radius: 50px; padding: 0.4rem 1rem;
+      font-size: 0.8rem; font-weight: 700; color: var(--blue); margin-bottom: 1rem;
+    }
+    .popup-section-header h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 2.8rem); color: var(--blue-deeper); margin-bottom: 0.5rem; }
+    .popup-section-header p { color: var(--text-muted); font-size: 0.97rem; }
+    .popup-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .popup-event-card {
+      background: white; border-radius: 20px; padding: 2rem;
+      border: 1px solid rgba(26,111,212,0.08);
+      display: flex; gap: 1.5rem; align-items: flex-start;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .popup-event-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,111,212,0.1); }
+    .pe-date {
+      background: var(--grad); border-radius: 14px; padding: 0.75rem 1rem;
+      text-align: center; flex-shrink: 0; min-width: 60px;
+    }
+    .pe-month { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: rgba(255,255,255,0.7); }
+    .pe-day { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: white; line-height: 1; }
+    .pe-name { font-size: 1.1rem; font-weight: 700; color: var(--blue-deeper); margin-bottom: 0.35rem; }
+    .pe-details, .pe-time { font-size: 0.83rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .pe-time { color: var(--blue); font-weight: 600; margin-bottom: 0.6rem; }
+    .pe-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* DROP-OFF */
+    .dropoff-section { padding: 5rem 4rem; background: white; }
+    .dropoff-inner { max-width: 1100px; margin: 0 auto; }
+    .dropoff-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 2rem; }
+    .dropoff-card {
+      background: var(--blue-pale); border-radius: 18px; padding: 1.5rem 1.75rem;
+      border: 1px solid rgba(26,111,212,0.1);
+      display: flex; gap: 1rem; align-items: flex-start;
+    }
+    .dc-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .dc-info { display: flex; flex-direction: column; gap: 0.15rem; }
+    .dc-info strong { font-size: 1rem; font-weight: 700; color: var(--blue-deeper); }
+    .dc-info span { font-size: 0.85rem; color: var(--text-muted); }
+    .dc-hours { font-size: 0.82rem; color: var(--blue); font-weight: 600; margin-top: 0.35rem; }
+    .dc-btn {
+      display: inline-block; background: var(--blue); color: white;
+      padding: 0.85rem 2rem; border-radius: 4px; text-decoration: none;
+      font-weight: 600; font-size: 0.95rem; transition: opacity 0.2s;
+    }
+    .dc-btn:hover { opacity: 0.85; }
+
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { display: none; }
@@ -406,6 +457,10 @@
       .process-step:last-child { border-bottom: none; }
       .cta-band { margin: 0 1.5rem 4rem; padding: 2.5rem; grid-template-columns: 1fr; }
       footer { padding: 2rem 1.5rem; flex-direction: column; align-items: flex-start; }
+      .popup-section { padding: 4rem 1.5rem; }
+      .popup-cards { grid-template-columns: 1fr; }
+      .dropoff-section { padding: 4rem 1.5rem; }
+      .dropoff-cards { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -588,6 +643,73 @@
     <div class="strip-item"><strong>100%</strong><span>College student approved</span></div>
   </div>
 
+  <!-- POPUP EVENTS -->
+  <div class="popup-section">
+    <div class="popup-section-inner">
+      <div class="popup-section-header">
+        <div class="section-eyebrow"><span>🎉 Pop-Up Events</span></div>
+        <h2>Catch us in person</h2>
+        <p>Come try on fits and pick up your rental at one of our pop-up spots around campus.</p>
+      </div>
+      <div class="popup-cards">
+        <div class="popup-event-card">
+          <div class="pe-date">
+            <div class="pe-month">OCT</div>
+            <div class="pe-day">25</div>
+          </div>
+          <div class="pe-info">
+            <div class="pe-name">Outside the SRB</div>
+            <div class="pe-details">📍 Student Resource Building, UCSB</div>
+            <div class="pe-time">⏰ Friday · 11am – 3pm</div>
+            <div class="pe-desc">Try on suits, Halloween costumes, and going-out fits before you rent. First come, first served.</div>
+          </div>
+        </div>
+        <div class="popup-event-card">
+          <div class="pe-date">
+            <div class="pe-month">NOV</div>
+            <div class="pe-day">3</div>
+          </div>
+          <div class="pe-info">
+            <div class="pe-name">IV Flea Market</div>
+            <div class="pe-details">📍 Isla Vista, Camino Pescadero</div>
+            <div class="pe-time">⏰ Sunday · 10am – 2pm</div>
+            <div class="pe-desc">Find us at the flea market — bringing the full closet. Walk-up rentals welcome. Cash or Venmo.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DROP-OFF LOCATIONS -->
+  <div class="dropoff-section">
+    <div class="dropoff-inner">
+      <div class="section-eyebrow" style="margin-bottom:1rem"><span>📦 Drop-Off Spots</span></div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,2.8rem);color:var(--blue-deeper);margin-bottom:0.75rem;">Return when you're done.</h2>
+      <p style="color:var(--text-muted);font-size:0.97rem;margin-bottom:2.5rem;max-width:560px;">Drop your rental off at either location by 8 PM on your due date. Use the <a href="dropoff.html" style="color:var(--blue);font-weight:600">drop-off form</a> to upload a photo and confirm return.</p>
+      <div class="dropoff-cards">
+        <div class="dropoff-card">
+          <div class="dc-icon">📍</div>
+          <div class="dc-info">
+            <strong>Alexis's Place</strong>
+            <span>6643 Del Playa Dr, Apt 2</span>
+            <span>Isla Vista, CA 93117</span>
+            <div class="dc-hours">Mon–Sun · 10am–8pm</div>
+          </div>
+        </div>
+        <div class="dropoff-card">
+          <div class="dc-icon">📍</div>
+          <div class="dc-info">
+            <strong>Ryan's Place</strong>
+            <span>6512 Sabado Tarde Rd, Apt 1</span>
+            <span>Isla Vista, CA 93117</span>
+            <div class="dc-hours">Mon–Sun · 11am–9pm</div>
+          </div>
+        </div>
+      </div>
+      <a href="dropoff.html" class="dc-btn">Submit Drop-Off Form →</a>
+    </div>
+  </div>
+
   <!-- PROCESS -->
   <div class="process-section">
     <div class="process-label"><span>The Process</span></div>
@@ -629,6 +751,7 @@
       <a href="browse.html">Browse</a>
       <a href="about.html">About</a>
       <a href="contact.html">Contact</a>
+      <a href="dropoff.html">Drop Off</a>
     </div>
     <p>© 2025 VistaFits · Isla Vista, CA</p>
   </footer>
