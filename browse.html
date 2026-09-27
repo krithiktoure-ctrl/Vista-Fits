@@ -61,10 +61,14 @@
     .item-card:hover:not(.unavailable) { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,111,212,0.13); }
 
     .item-img {
-      width: 100%; height: 240px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 5rem; position: relative; overflow: hidden;
+      width: 100%; height: 260px;
+      position: relative; overflow: hidden;
     }
+    .item-img img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      display: block; transition: transform 0.3s;
+    }
+    .item-card:hover:not(.unavailable) .item-img img { transform: scale(1.04); }
 
     .item-card.unavailable .item-img::after {
       content: 'RENTED OUT';
@@ -184,7 +188,9 @@
 
     <!-- SUITS -->
     <div class="item-card" data-cat="suits">
-      <div class="item-img" style="background: linear-gradient(145deg, #1a1a2e, #2d2d4e);">🤵</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=600&q=80" alt="Black Slim-Fit Suit" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Suits</div>
@@ -199,7 +205,9 @@
     </div>
 
     <div class="item-card unavailable" data-cat="suits">
-      <div class="item-img" style="background: linear-gradient(145deg, #1c2951, #2e4a8c);">🤵</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1594938298603-a3554f5df20d?w=600&q=80" alt="Navy Blazer + Grey Trousers" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Suits</div>
@@ -214,7 +222,9 @@
     </div>
 
     <div class="item-card" data-cat="suits">
-      <div class="item-img" style="background: linear-gradient(145deg, #2c2c2c, #4a4a4a);">🕴️</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=600&q=80" alt="Charcoal 3-Piece Suit" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Suits</div>
@@ -229,7 +239,9 @@
     </div>
 
     <div class="item-card unavailable" data-cat="suits">
-      <div class="item-img" style="background: linear-gradient(145deg, #4a0e0e, #7a1e1e);">🧥</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1555069519-127aadecd35a?w=600&q=80" alt="Burgundy Velvet Blazer" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Suits</div>
@@ -244,7 +256,9 @@
     </div>
 
     <div class="item-card" data-cat="suits">
-      <div class="item-img" style="background: linear-gradient(145deg, #e8f4fd, #c2dff5);">👔</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=600&q=80" alt="White Linen Button-Down" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Suits</div>
@@ -260,7 +274,9 @@
 
     <!-- HALLOWEEN -->
     <div class="item-card" data-cat="halloween">
-      <div class="item-img" style="background: linear-gradient(145deg, #1a1a1a, #333);">💀</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1570303345338-e1f0eddf4946?w=600&q=80" alt="Skeleton Bodysuit" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Halloween</div>
@@ -275,7 +291,9 @@
     </div>
 
     <div class="item-card unavailable" data-cat="halloween">
-      <div class="item-img" style="background: linear-gradient(145deg, #5a0000, #990000);">😈</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1509557965875-b88c97052f0e?w=600&q=80" alt="Devil Costume Set" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Halloween</div>
@@ -290,7 +308,9 @@
     </div>
 
     <div class="item-card" data-cat="halloween">
-      <div class="item-img" style="background: linear-gradient(145deg, #0d0030, #1a0060);">🧛</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=600&q=80" alt="Vampire Count Costume" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Halloween</div>
@@ -306,7 +326,9 @@
 
     <!-- GOING OUT -->
     <div class="item-card" data-cat="going-out">
-      <div class="item-img" style="background: linear-gradient(145deg, #1a0a2e, #3a1a5e);">✨</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=600&q=80" alt="Satin Two-Piece Set" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Going Out</div>
@@ -321,7 +343,9 @@
     </div>
 
     <div class="item-card" data-cat="going-out">
-      <div class="item-img" style="background: linear-gradient(145deg, #2a1a00, #5a3a00);">💃</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1566206091558-7f218b696731?w=600&q=80" alt="Sequin Party Blouse" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Going Out</div>
@@ -336,7 +360,9 @@
     </div>
 
     <div class="item-card unavailable" data-cat="going-out">
-      <div class="item-img" style="background: linear-gradient(145deg, #0f0f1a, #1a1a33);">👖</div>
+      <div class="item-img">
+        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80" alt="Black Jogger Dress Pants" />
+      </div>
       <div class="unavail-badge">Rented Out</div>
       <div class="item-body">
         <div class="item-category">Going Out</div>
