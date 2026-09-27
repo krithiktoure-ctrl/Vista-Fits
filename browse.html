@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse — VistaFits</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1a6fd4; --blue-light: #e6f1fb; --blue-dark: #071f3d;
+      --off-white: #f0f6ff; --text: #0a1628; --text-muted: #4a6080;
+      --grad: linear-gradient(135deg, #071f3d 0%, #0d3d7a 45%, #1a6fd4 100%);
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--off-white); color: var(--text); }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.4rem 3rem; background: rgba(7,31,61,0.92); backdrop-filter: blur(16px);
+    }
+    .nav-logo img { height: 90px; width: auto; display: block; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a { text-decoration: none; color: rgba(255,255,255,0.65); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--blue); }
+    .nav-cta { background: #5ab4ff; color: #071f3d !important; padding: 0.5rem 1.3rem; border-radius: 50px; font-weight: 600 !important; }
+
+    .page-header { background: var(--grad); padding: 3.5rem 3rem 2.5rem; text-align: center; }
+    .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 4vw, 3rem); color: white; margin-bottom: 0.5rem; }
+    .page-header p { color: rgba(255,255,255,0.8); font-size: 1rem; }
+
+    .popup-banner {
+      background: #fff8e1; border-bottom: 2px solid #ffc107;
+      padding: 0.85rem 3rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .popup-banner .pb-label { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #b8860b; background: #ffc107; padding: 0.2rem 0.6rem; border-radius: 4px; white-space: nowrap; }
+    .popup-banner .pb-events { display: flex; gap: 2rem; flex-wrap: wrap; }
+    .popup-banner .pb-event { font-size: 0.88rem; color: #5a4000; }
+    .popup-banner .pb-event strong { color: #b8860b; }
+
+    .filter-bar { max-width: 1100px; margin: 0 auto; padding: 2rem 2rem 0; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 0.55rem 1.2rem; border-radius: 50px;
+      border: 1.5px solid rgba(26,111,212,0.2); background: white; color: var(--text-muted);
+      font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: all 0.2s;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .filter-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .filter-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+    .catalog-grid {
+      max-width: 1100px; margin: 0 auto; padding: 1.5rem 2rem 5rem;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.5rem;
+    }
+
+    .item-card {
+      background: white; border-radius: 20px; overflow: hidden;
+      border: 1px solid rgba(26,111,212,0.08);
+      transition: transform 0.2s, box-shadow 0.2s; position: relative;
+    }
+    .item-card:hover:not(.unavailable) { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,111,212,0.13); }
+
+    .item-img {
+      width: 100%; height: 240px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; position: relative; overflow: hidden;
+    }
+
+    .item-card.unavailable .item-img::after {
+      content: 'RENTED OUT';
+      position: absolute; inset: 0;
+      background: rgba(7,31,61,0.72);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.12em;
+    }
+    .item-card.unavailable { opacity: 0.85; }
+
+    .unavail-badge { display: none; }
+    .item-card.unavailable .unavail-badge {
+      display: block; position: absolute; top: 12px; right: 12px;
+      background: #ef4444; color: white; font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.08em; padding: 0.25rem 0.6rem; border-radius: 6px;
+      text-transform: uppercase; z-index: 2;
+    }
+
+    .item-body { padding: 1.25rem 1.4rem 1.5rem; }
+    .item-category { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 0.3rem; }
+    .item-name { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--blue-dark); margin-bottom: 0.3rem; }
+    .item-desc { font-size: 0.83rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.9rem; }
+
+    .item-sizes { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .size-tag { font-size: 0.75rem; font-weight: 600; background: var(--off-white); border: 1px solid rgba(26,111,212,0.15); color: var(--text-muted); padding: 0.2rem 0.55rem; border-radius: 6px; }
+
+    .item-pricing { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .price-pill { background: var(--blue-light); color: var(--blue-dark); font-size: 0.78rem; font-weight: 700; padding: 0.3rem 0.7rem; border-radius: 50px; }
+
+    .rent-btn {
+      width: 100%; background: var(--blue); color: white; border: none;
+      padding: 0.7rem; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .rent-btn:hover { background: var(--blue-dark); }
+    .rent-btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(7,31,61,0.5); backdrop-filter: blur(6px);
+      z-index: 200; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 24px; padding: 2.25rem; max-width: 480px; width: 100%; position: relative; }
+    .modal-close { position: absolute; top: 1rem; right: 1.25rem; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
+    .modal h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--blue-dark); margin-bottom: 0.4rem; }
+    .modal .modal-item-name { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .duration-options { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+    .duration-card {
+      border: 2px solid rgba(26,111,212,0.15); border-radius: 14px;
+      padding: 1rem 0.75rem; text-align: center; cursor: pointer; transition: all 0.2s;
+    }
+    .duration-card:hover { border-color: var(--blue); }
+    .duration-card.picked { border-color: var(--blue); background: var(--blue-light); }
+    .duration-card .dur-weeks { font-size: 1.4rem; font-weight: 700; color: var(--blue-dark); }
+    .duration-card .dur-label { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .duration-card .dur-price { font-size: 1rem; font-weight: 700; color: var(--blue); }
+    .modal-pickup {
+      background: var(--off-white); border-radius: 12px; padding: 1rem 1.1rem;
+      margin-bottom: 1.25rem; font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;
+    }
+    .modal-pickup strong { color: var(--text); }
+    .modal-btn {
+      width: 100%; background: var(--blue); color: white; border: none;
+      padding: 0.85rem; border-radius: 50px; font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;
+    }
+    .modal-btn:hover { background: var(--blue-dark); }
+
+    footer { background: var(--blue-dark); color: rgba(255,255,255,0.7); text-align: center; padding: 2.5rem 3rem; }
+    footer .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: white; display: block; margin-bottom: 0.5rem; }
+    footer p { font-size: 0.88rem; }
+
+    @media (max-width: 700px) {
+      nav { padding: 0.4rem 1.5rem; }
+      .nav-links { display: none; }
+      .popup-banner { padding: 0.75rem 1.25rem; }
+      .catalog-grid { padding: 1.25rem 1.25rem 4rem; grid-template-columns: 1fr; }
+      .filter-bar { padding: 1.5rem 1.25rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a class="nav-logo" href="index.html"><img src="logo.png" alt="VistaFits" /></a>
+    <ul class="nav-links">
+      <li><a href="browse.html" class="active">Browse</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a class="nav-cta" href="rent.html">Rent Now</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <h1>The Closet 👗🤵</h1>
+    <p>Pick your fit. Book your duration. Look fire.</p>
+  </div>
+
+  <div class="popup-banner">
+    <span class="pb-label">🎉 Pop-Up Events</span>
+    <div class="pb-events">
+      <div class="pb-event"><strong>Outside the SRB</strong> — Fri, Oct 25 · 11am–3pm</div>
+      <div class="pb-event"><strong>IV Flea Market</strong> — Sun, Nov 3 · 10am–2pm</div>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filter('all', this)">All Fits</button>
+    <button class="filter-btn" onclick="filter('suits', this)">🤵 Suits</button>
+    <button class="filter-btn" onclick="filter('halloween', this)">🎃 Halloween</button>
+    <button class="filter-btn" onclick="filter('going-out', this)">✨ Going Out</button>
+  </div>
+
+  <div class="catalog-grid" id="catalog-grid">
+
+    <!-- SUITS -->
+    <div class="item-card" data-cat="suits">
+      <div class="item-img" style="background: linear-gradient(145deg, #1a1a2e, #2d2d4e);">🤵</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Suits</div>
+        <div class="item-name">Black Slim-Fit Suit</div>
+        <div class="item-desc">Classic 2-piece: slim-cut jacket + trousers. Perfect for formals, date nights, or any event that requires you to look like you have your life together.</div>
+        <div class="item-sizes"><span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $18</span><span class="price-pill">2 wks — $28</span><span class="price-pill">3 wks — $35</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('Black Slim-Fit Suit', 18, 28, 35)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <div class="item-card unavailable" data-cat="suits">
+      <div class="item-img" style="background: linear-gradient(145deg, #1c2951, #2e4a8c);">🤵</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Suits</div>
+        <div class="item-name">Navy Blazer + Grey Trousers</div>
+        <div class="item-desc">Effortlessly classic combo. Navy blazer with charcoal trousers — understated, polished, and works at any formal event.</div>
+        <div class="item-sizes"><span class="size-tag">M</span><span class="size-tag">L</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $15</span><span class="price-pill">2 wks — $24</span><span class="price-pill">3 wks — $30</span>
+        </div>
+        <button class="rent-btn" disabled>Currently Rented</button>
+      </div>
+    </div>
+
+    <div class="item-card" data-cat="suits">
+      <div class="item-img" style="background: linear-gradient(145deg, #2c2c2c, #4a4a4a);">🕴️</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Suits</div>
+        <div class="item-name">Charcoal 3-Piece Suit</div>
+        <div class="item-desc">Full 3-piece with vest included. When you need to walk in and make everyone turn their head — this is the one.</div>
+        <div class="item-sizes"><span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $22</span><span class="price-pill">2 wks — $34</span><span class="price-pill">3 wks — $42</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('Charcoal 3-Piece Suit', 22, 34, 42)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <div class="item-card unavailable" data-cat="suits">
+      <div class="item-img" style="background: linear-gradient(145deg, #4a0e0e, #7a1e1e);">🧥</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Suits</div>
+        <div class="item-name">Burgundy Velvet Blazer</div>
+        <div class="item-desc">Statement piece. Burgundy velvet blazer — for when you want everyone to know you're the main character at the formal.</div>
+        <div class="item-sizes"><span class="size-tag">M</span><span class="size-tag">L</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $20</span><span class="price-pill">2 wks — $30</span><span class="price-pill">3 wks — $38</span>
+        </div>
+        <button class="rent-btn" disabled>Currently Rented</button>
+      </div>
+    </div>
+
+    <div class="item-card" data-cat="suits">
+      <div class="item-img" style="background: linear-gradient(145deg, #e8f4fd, #c2dff5);">👔</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Suits</div>
+        <div class="item-name">White Linen Button-Down</div>
+        <div class="item-desc">Crisp white linen — great for beach formals or summer events. Works solo or layered under a blazer for a polished look.</div>
+        <div class="item-sizes"><span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $10</span><span class="price-pill">2 wks — $16</span><span class="price-pill">3 wks — $20</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('White Linen Button-Down', 10, 16, 20)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <!-- HALLOWEEN -->
+    <div class="item-card" data-cat="halloween">
+      <div class="item-img" style="background: linear-gradient(145deg, #1a1a1a, #333);">💀</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Halloween</div>
+        <div class="item-name">Skeleton Bodysuit</div>
+        <div class="item-desc">Full-print skeleton bodysuit with glow-in-the-dark bones on black. Easy to wear, always a hit. One size fits most.</div>
+        <div class="item-sizes"><span class="size-tag">S/M</span><span class="size-tag">L/XL</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $12</span><span class="price-pill">2 wks — $18</span><span class="price-pill">3 wks — $22</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('Skeleton Bodysuit', 12, 18, 22)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <div class="item-card unavailable" data-cat="halloween">
+      <div class="item-img" style="background: linear-gradient(145deg, #5a0000, #990000);">😈</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Halloween</div>
+        <div class="item-name">Devil Costume Set</div>
+        <div class="item-desc">Red bodycon dress, devil horns headband, and pitchfork prop. Classic Halloween — rented out every year for good reason.</div>
+        <div class="item-sizes"><span class="size-tag">XS</span><span class="size-tag">S</span><span class="size-tag">M</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $14</span><span class="price-pill">2 wks — $21</span><span class="price-pill">3 wks — $26</span>
+        </div>
+        <button class="rent-btn" disabled>Currently Rented</button>
+      </div>
+    </div>
+
+    <div class="item-card" data-cat="halloween">
+      <div class="item-img" style="background: linear-gradient(145deg, #0d0030, #1a0060);">🧛</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Halloween</div>
+        <div class="item-name">Vampire Count Costume</div>
+        <div class="item-desc">Black cape, white dress shirt with blood splatter, and fangs. Classic vampire — dramatic, effortless, always relevant on Halloween.</div>
+        <div class="item-sizes"><span class="size-tag">M</span><span class="size-tag">L</span><span class="size-tag">XL</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $16</span><span class="price-pill">2 wks — $24</span><span class="price-pill">3 wks — $29</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('Vampire Count Costume', 16, 24, 29)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <!-- GOING OUT -->
+    <div class="item-card" data-cat="going-out">
+      <div class="item-img" style="background: linear-gradient(145deg, #1a0a2e, #3a1a5e);">✨</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Going Out</div>
+        <div class="item-name">Satin Two-Piece Set</div>
+        <div class="item-desc">Midnight blue satin top and matching wide-leg trousers. Elevated and sleek — perfect for a frat formal or upscale party.</div>
+        <div class="item-sizes"><span class="size-tag">XS</span><span class="size-tag">S</span><span class="size-tag">M</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $16</span><span class="price-pill">2 wks — $25</span><span class="price-pill">3 wks — $31</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('Satin Two-Piece Set', 16, 25, 31)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <div class="item-card" data-cat="going-out">
+      <div class="item-img" style="background: linear-gradient(145deg, #2a1a00, #5a3a00);">💃</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Going Out</div>
+        <div class="item-name">Sequin Party Blouse</div>
+        <div class="item-desc">Gold sequin blouse that catches every light in the room. Pairs with black jeans, leather pants, or a mini skirt. All eyes on you.</div>
+        <div class="item-sizes"><span class="size-tag">XS</span><span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $12</span><span class="price-pill">2 wks — $18</span><span class="price-pill">3 wks — $22</span>
+        </div>
+        <button class="rent-btn" onclick="openModal('Sequin Party Blouse', 12, 18, 22)">Reserve This Fit</button>
+      </div>
+    </div>
+
+    <div class="item-card unavailable" data-cat="going-out">
+      <div class="item-img" style="background: linear-gradient(145deg, #0f0f1a, #1a1a33);">👖</div>
+      <div class="unavail-badge">Rented Out</div>
+      <div class="item-body">
+        <div class="item-category">Going Out</div>
+        <div class="item-name">Black Jogger Dress Pants</div>
+        <div class="item-desc">Dress-pant silhouette with jogger comfort. Works as going-out bottoms or dressed up for a formal — the ultimate hybrid.</div>
+        <div class="item-sizes"><span class="size-tag">S</span><span class="size-tag">M</span><span class="size-tag">L</span></div>
+        <div class="item-pricing">
+          <span class="price-pill">1 wk — $10</span><span class="price-pill">2 wks — $15</span><span class="price-pill">3 wks — $19</span>
+        </div>
+        <button class="rent-btn" disabled>Currently Rented</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Rental Modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <h3>Reserve Your Fit</h3>
+      <div class="modal-item-name" id="modal-item-name">Loading…</div>
+
+      <p style="font-size:0.85rem;font-weight:600;color:var(--text);margin-bottom:0.75rem;">Choose rental duration:</p>
+      <div class="duration-options">
+        <div class="duration-card" onclick="pickDuration(this)">
+          <div class="dur-weeks">1</div>
+          <div class="dur-label">Week</div>
+          <div class="dur-price" id="price-1">$18</div>
+        </div>
+        <div class="duration-card" onclick="pickDuration(this)">
+          <div class="dur-weeks">2</div>
+          <div class="dur-label">Weeks</div>
+          <div class="dur-price" id="price-2">$28</div>
+        </div>
+        <div class="duration-card" onclick="pickDuration(this)">
+          <div class="dur-weeks">3</div>
+          <div class="dur-label">Weeks</div>
+          <div class="dur-price" id="price-3">$35</div>
+        </div>
+      </div>
+
+      <div class="modal-pickup">
+        <strong>📍 Pickup Locations</strong><br>
+        Alexis's place — 6643 Del Playa Dr, Apt 2<br>
+        Ryan's place — 6512 Sabado Tarde Rd, Apt 1<br><br>
+        <strong>⏰ Pickup Hours</strong><br>
+        Mon–Sun, 10am–9pm · Coordinate via Instagram or text
+      </div>
+
+      <button class="modal-btn" onclick="goToRent()">Continue to Reservation →</button>
+    </div>
+  </div>
+
+  <footer>
+    <span class="footer-logo">VistaFits</span>
+    <p>© 2025 VistaFits · Isla Vista, CA · Rent. Wear. Return.</p>
+  </footer>
+
+  <script>
+    let selectedDuration = null;
+    let prices = [0, 0, 0];
+
+    function filter(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.item-card').forEach(card => {
+        card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+      });
+    }
+
+    function openModal(name, p1, p2, p3) {
+      prices = [p1, p2, p3];
+      document.getElementById('modal-item-name').textContent = name;
+      document.getElementById('price-1').textContent = '$' + p1;
+      document.getElementById('price-2').textContent = '$' + p2;
+      document.getElementById('price-3').textContent = '$' + p3;
+      document.querySelectorAll('.duration-card').forEach(c => c.classList.remove('picked'));
+      selectedDuration = null;
+      document.getElementById('modal-overlay').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === document.getElementById('modal-overlay')) closeModal();
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function pickDuration(card) {
+      document.querySelectorAll('.duration-card').forEach(c => c.classList.remove('picked'));
+      card.classList.add('picked');
+      selectedDuration = parseInt(card.querySelector('.dur-weeks').textContent);
+    }
+
+    function goToRent() {
+      if (!selectedDuration) { alert('Please pick a rental duration first!'); return; }
+      const item = document.getElementById('modal-item-name').textContent;
+      window.location.href = 'rent.html?item=' + encodeURIComponent(item) + '&weeks=' + selectedDuration;
+    }
+  </script>
+</body>
+</html>
