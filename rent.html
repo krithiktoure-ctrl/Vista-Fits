@@ -18,7 +18,8 @@
       display: flex; align-items: center; justify-content: space-between;
       padding: 0.4rem 3rem; background: rgba(7,31,61,0.92); backdrop-filter: blur(16px);
     }
-    .nav-logo img { height: 90px; width: auto; display: block; }
+    .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; color: white; text-decoration: none; }
+    .nav-logo span { color: var(--blue); }
     .nav-links { display: flex; gap: 2.5rem; list-style: none; }
     .nav-links a { text-decoration: none; color: rgba(255,255,255,0.65); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
     .nav-links a:hover { color: var(--blue); }
@@ -154,7 +155,7 @@
 </head>
 <body>
   <nav>
-    <a class="nav-logo" href="index.html"><img src="logo.png" alt="VistaFits" /></a>
+    <a class="nav-logo" href="index.html">Vista<span>Fits</span></a>
     <ul class="nav-links">
       <li><a href="browse.html">Browse</a></li>
       <li><a href="about.html">About</a></li>
@@ -268,8 +269,8 @@
           <label>Preferred Pickup Location</label>
           <select id="info-location">
             <option value="">Select pickup spot...</option>
-            <option>Alexis's place — 6643 Del Playa Dr, Apt 2</option>
-            <option>Ryan's place — 6512 Sabado Tarde Rd, Apt 1</option>
+            <option>Outside the SRB</option>
+            <option>IV Flea Market</option>
           </select>
         </div>
         <div class="form-group"><label>Rental Start Date</label><input type="date" id="info-date" /></div>
